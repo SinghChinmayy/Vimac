@@ -1,225 +1,353 @@
 {
-    "description": "CAPS+SHIFT+H/J/K/L › Rectangle halves, CAPS+SHIFT+U/I/N/M › quarters, CAPS+SHIFT+F/R › maximize/restore",
+    "description": "CAPS+t = one-shot tiling (auto-exits after action). CAPS+T = toggle tiling mode (CAPS alone exits). H/J/K/L=halves, Y/U/B/N=quarters, SPACE=maximize, R=restore.",
     "manipulators": [
+
+        /* ══════════════════════════════════════════════
+           MODE TRIGGERS
+           CAPS+t (lowercase)  →  one-shot  (tiling_oneshot=1)
+           CAPS+T (uppercase)  →  toggle mode  (tiling_mode=1 or 0)
+           ══════════════════════════════════════════════ */
+
         {
+            "description": "CAPS+t → one-shot tiling (activate)",
             "conditions": [
-                {
-                    "name": "caps_lock pressed",
-                    "type": "variable_if",
-                    "value": 1
-                }
+                { "name": "caps_lock pressed", "type": "variable_if", "value": 1 },
+                { "name": "tiling_oneshot",    "type": "variable_if", "value": 0 },
+                { "name": "tiling_mode",       "type": "variable_if", "value": 0 }
             ],
             "from": {
-                "key_code": "h",
-                "modifiers": {
-                    "mandatory": ["shift"]
-                }
+                "key_code": "t",
+                "modifiers": { "optional": ["caps_lock"] }
             },
             "to": [
-                {
-                    "key_code": "left_arrow",
-                    "modifiers": ["option"]
-                }
+                { "set_variable": { "name": "tiling_oneshot", "value": 1 } }
+            ],
+            "type": "basic"
+        },
+
+        {
+            "description": "CAPS+T → toggle mode ON",
+            "conditions": [
+                { "name": "caps_lock pressed", "type": "variable_if", "value": 1 },
+                { "name": "tiling_mode",       "type": "variable_if", "value": 0 }
+            ],
+            "from": {
+                "key_code": "t",
+                "modifiers": { "mandatory": ["shift"] }
+            },
+            "to": [
+                { "set_variable": { "name": "tiling_mode",    "value": 1 } },
+                { "set_variable": { "name": "tiling_oneshot", "value": 0 } }
             ],
             "type": "basic"
         },
         {
+            "description": "CAPS+T → toggle mode OFF",
             "conditions": [
-                {
-                    "name": "caps_lock pressed",
-                    "type": "variable_if",
-                    "value": 1
-                }
+                { "name": "caps_lock pressed", "type": "variable_if", "value": 1 },
+                { "name": "tiling_mode",       "type": "variable_if", "value": 1 }
             ],
             "from": {
-                "key_code": "l",
-                "modifiers": {
-                    "mandatory": ["shift"]
-                }
+                "key_code": "t",
+                "modifiers": { "mandatory": ["shift"] }
             },
             "to": [
-                {
-                    "key_code": "right_arrow",
-                    "modifiers": ["option"]
-                }
+                { "set_variable": { "name": "tiling_mode", "value": 0 } }
+            ],
+            "type": "basic"
+        },
+
+        /* ══════════════════════════════════════════════
+           EXIT TOGGLE MODE
+           CAPS alone (while tiling_mode=1)  →  exit
+           ══════════════════════════════════════════════ */
+        {
+            "description": "CAPS alone → exit toggle tiling mode",
+            "conditions": [
+                { "name": "tiling_mode", "type": "variable_if", "value": 1 }
+            ],
+            "from": {
+                "key_code": "caps_lock",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                { "set_variable": { "name": "caps_lock pressed", "value": 1 } }
+            ],
+            "to_after_key_up": [
+                { "set_variable": { "name": "caps_lock pressed", "value": 0 } }
+            ],
+            "to_if_alone": [
+                { "set_variable": { "name": "tiling_mode", "value": 0 } }
+            ],
+            "type": "basic"
+        },
+
+        /* ══════════════════════════════════════════════
+           HALVES — H / J / K / L
+           One-shot versions reset tiling_oneshot after firing.
+           Toggle-mode versions leave tiling_mode intact.
+           ══════════════════════════════════════════════ */
+
+        /* H = Left Half */
+        {
+            "description": "[oneshot] H → left half",
+            "conditions": [
+                { "name": "tiling_oneshot", "type": "variable_if", "value": 1 }
+            ],
+            "from": { "key_code": "h", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "key_code": "left_arrow", "modifiers": ["control", "option"] },
+                { "set_variable": { "name": "tiling_oneshot", "value": 0 } }
             ],
             "type": "basic"
         },
         {
+            "description": "[toggle] H → left half",
             "conditions": [
-                {
-                    "name": "caps_lock pressed",
-                    "type": "variable_if",
-                    "value": 1
-                }
+                { "name": "tiling_mode", "type": "variable_if", "value": 1 }
             ],
-            "from": {
-                "key_code": "k",
-                "modifiers": {
-                    "mandatory": ["shift"]
-                }
-            },
+            "from": { "key_code": "h", "modifiers": { "optional": ["any"] } },
             "to": [
-                {
-                    "key_code": "up_arrow",
-                    "modifiers": ["option"]
-                }
+                { "key_code": "left_arrow", "modifiers": ["control", "option"] }
+            ],
+            "type": "basic"
+        },
+
+        /* L = Right Half */
+        {
+            "description": "[oneshot] L → right half",
+            "conditions": [
+                { "name": "tiling_oneshot", "type": "variable_if", "value": 1 }
+            ],
+            "from": { "key_code": "l", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "key_code": "right_arrow", "modifiers": ["control", "option"] },
+                { "set_variable": { "name": "tiling_oneshot", "value": 0 } }
             ],
             "type": "basic"
         },
         {
+            "description": "[toggle] L → right half",
             "conditions": [
-                {
-                    "name": "caps_lock pressed",
-                    "type": "variable_if",
-                    "value": 1
-                }
+                { "name": "tiling_mode", "type": "variable_if", "value": 1 }
             ],
-            "from": {
-                "key_code": "j",
-                "modifiers": {
-                    "mandatory": ["shift"]
-                }
-            },
+            "from": { "key_code": "l", "modifiers": { "optional": ["any"] } },
             "to": [
-                {
-                    "key_code": "down_arrow",
-                    "modifiers": ["option"]
-                }
+                { "key_code": "right_arrow", "modifiers": ["control", "option"] }
+            ],
+            "type": "basic"
+        },
+
+        /* K = Top Half */
+        {
+            "description": "[oneshot] K → top half",
+            "conditions": [
+                { "name": "tiling_oneshot", "type": "variable_if", "value": 1 }
+            ],
+            "from": { "key_code": "k", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "key_code": "up_arrow", "modifiers": ["control", "option"] },
+                { "set_variable": { "name": "tiling_oneshot", "value": 0 } }
             ],
             "type": "basic"
         },
         {
+            "description": "[toggle] K → top half",
             "conditions": [
-                {
-                    "name": "caps_lock pressed",
-                    "type": "variable_if",
-                    "value": 1
-                }
+                { "name": "tiling_mode", "type": "variable_if", "value": 1 }
             ],
-            "from": {
-                "key_code": "u",
-                "modifiers": {
-                    "mandatory": ["shift"]
-                }
-            },
+            "from": { "key_code": "k", "modifiers": { "optional": ["any"] } },
             "to": [
-                {
-                    "key_code": "left_arrow",
-                    "modifiers": ["option", "shift"]
-                }
+                { "key_code": "up_arrow", "modifiers": ["control", "option"] }
+            ],
+            "type": "basic"
+        },
+
+        /* J = Bottom Half */
+        {
+            "description": "[oneshot] J → bottom half",
+            "conditions": [
+                { "name": "tiling_oneshot", "type": "variable_if", "value": 1 }
+            ],
+            "from": { "key_code": "j", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "key_code": "down_arrow", "modifiers": ["control", "option"] },
+                { "set_variable": { "name": "tiling_oneshot", "value": 0 } }
             ],
             "type": "basic"
         },
         {
+            "description": "[toggle] J → bottom half",
             "conditions": [
-                {
-                    "name": "caps_lock pressed",
-                    "type": "variable_if",
-                    "value": 1
-                }
+                { "name": "tiling_mode", "type": "variable_if", "value": 1 }
             ],
-            "from": {
-                "key_code": "i",
-                "modifiers": {
-                    "mandatory": ["shift"]
-                }
-            },
+            "from": { "key_code": "j", "modifiers": { "optional": ["any"] } },
             "to": [
-                {
-                    "key_code": "right_arrow",
-                    "modifiers": ["option", "shift"]
-                }
+                { "key_code": "down_arrow", "modifiers": ["control", "option"] }
+            ],
+            "type": "basic"
+        },
+
+        /* ══════════════════════════════════════════════
+           QUARTERS — Y / U / B / N
+           Spatial layout:
+             Y = top-left    U = top-right
+             B = bottom-left N = bottom-right
+           ══════════════════════════════════════════════ */
+
+        /* Y = Top-Left */
+        {
+            "description": "[oneshot] Y → top-left quarter",
+            "conditions": [
+                { "name": "tiling_oneshot", "type": "variable_if", "value": 1 }
+            ],
+            "from": { "key_code": "y", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "key_code": "left_arrow", "modifiers": ["option", "shift"] },
+                { "set_variable": { "name": "tiling_oneshot", "value": 0 } }
             ],
             "type": "basic"
         },
         {
+            "description": "[toggle] Y → top-left quarter",
             "conditions": [
-                {
-                    "name": "caps_lock pressed",
-                    "type": "variable_if",
-                    "value": 1
-                }
+                { "name": "tiling_mode", "type": "variable_if", "value": 1 }
             ],
-            "from": {
-                "key_code": "n",
-                "modifiers": {
-                    "mandatory": ["shift"]
-                }
-            },
+            "from": { "key_code": "y", "modifiers": { "optional": ["any"] } },
             "to": [
-                {
-                    "key_code": "j",
-                    "modifiers": ["control", "option"]
-                }
+                { "key_code": "left_arrow", "modifiers": ["option", "shift"] }
+            ],
+            "type": "basic"
+        },
+
+        /* U = Top-Right */
+        {
+            "description": "[oneshot] U → top-right quarter",
+            "conditions": [
+                { "name": "tiling_oneshot", "type": "variable_if", "value": 1 }
+            ],
+            "from": { "key_code": "u", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "key_code": "right_arrow", "modifiers": ["option", "shift"] },
+                { "set_variable": { "name": "tiling_oneshot", "value": 0 } }
             ],
             "type": "basic"
         },
         {
+            "description": "[toggle] U → top-right quarter",
             "conditions": [
-                {
-                    "name": "caps_lock pressed",
-                    "type": "variable_if",
-                    "value": 1
-                }
+                { "name": "tiling_mode", "type": "variable_if", "value": 1 }
             ],
-            "from": {
-                "key_code": "m",
-                "modifiers": {
-                    "mandatory": ["shift"]
-                }
-            },
+            "from": { "key_code": "u", "modifiers": { "optional": ["any"] } },
             "to": [
-                {
-                    "key_code": "k",
-                    "modifiers": ["control", "option"]
-                }
+                { "key_code": "right_arrow", "modifiers": ["option", "shift"] }
+            ],
+            "type": "basic"
+        },
+
+        /* B = Bottom-Left */
+        {
+            "description": "[oneshot] B → bottom-left quarter",
+            "conditions": [
+                { "name": "tiling_oneshot", "type": "variable_if", "value": 1 }
+            ],
+            "from": { "key_code": "b", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "key_code": "j", "modifiers": ["control", "option"] },
+                { "set_variable": { "name": "tiling_oneshot", "value": 0 } }
             ],
             "type": "basic"
         },
         {
+            "description": "[toggle] B → bottom-left quarter",
             "conditions": [
-                {
-                    "name": "caps_lock pressed",
-                    "type": "variable_if",
-                    "value": 1
-                }
+                { "name": "tiling_mode", "type": "variable_if", "value": 1 }
             ],
-            "from": {
-                "key_code": "f",
-                "modifiers": {
-                    "mandatory": ["shift"]
-                }
-            },
+            "from": { "key_code": "b", "modifiers": { "optional": ["any"] } },
             "to": [
-                {
-                    "key_code": "up_arrow",
-                    "modifiers": ["option", "shift"]
-                }
+                { "key_code": "j", "modifiers": ["control", "option"] }
+            ],
+            "type": "basic"
+        },
+
+        /* N = Bottom-Right */
+        {
+            "description": "[oneshot] N → bottom-right quarter",
+            "conditions": [
+                { "name": "tiling_oneshot", "type": "variable_if", "value": 1 }
+            ],
+            "from": { "key_code": "n", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "key_code": "k", "modifiers": ["control", "option"] },
+                { "set_variable": { "name": "tiling_oneshot", "value": 0 } }
             ],
             "type": "basic"
         },
         {
+            "description": "[toggle] N → bottom-right quarter",
             "conditions": [
-                {
-                    "name": "caps_lock pressed",
-                    "type": "variable_if",
-                    "value": 1
-                }
+                { "name": "tiling_mode", "type": "variable_if", "value": 1 }
             ],
-            "from": {
-                "key_code": "r",
-                "modifiers": {
-                    "mandatory": ["shift"]
-                }
-            },
+            "from": { "key_code": "n", "modifiers": { "optional": ["any"] } },
             "to": [
-                {
-                    "key_code": "delete_or_backspace",
-                    "modifiers": ["control", "option"]
-                }
+                { "key_code": "k", "modifiers": ["control", "option"] }
+            ],
+            "type": "basic"
+        },
+
+        /* ══════════════════════════════════════════════
+           MAXIMIZE & RESTORE — SPACE / R
+           ══════════════════════════════════════════════ */
+
+        /* SPACE = Maximize */
+        {
+            "description": "[oneshot] SPACE → maximize",
+            "conditions": [
+                { "name": "tiling_oneshot", "type": "variable_if", "value": 1 }
+            ],
+            "from": { "key_code": "spacebar", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "key_code": "return_or_enter", "modifiers": ["control", "option"] },
+                { "set_variable": { "name": "tiling_oneshot", "value": 0 } }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "[toggle] SPACE → maximize",
+            "conditions": [
+                { "name": "tiling_mode", "type": "variable_if", "value": 1 }
+            ],
+            "from": { "key_code": "spacebar", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "key_code": "return_or_enter", "modifiers": ["control", "option"] }
+            ],
+            "type": "basic"
+        },
+
+        /* R = Restore */
+        {
+            "description": "[oneshot] R → restore",
+            "conditions": [
+                { "name": "tiling_oneshot", "type": "variable_if", "value": 1 }
+            ],
+            "from": { "key_code": "r", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "key_code": "delete_or_backspace", "modifiers": ["control", "option"] },
+                { "set_variable": { "name": "tiling_oneshot", "value": 0 } }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "[toggle] R → restore",
+            "conditions": [
+                { "name": "tiling_mode", "type": "variable_if", "value": 1 }
+            ],
+            "from": { "key_code": "r", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "key_code": "delete_or_backspace", "modifiers": ["control", "option"] }
             ],
             "type": "basic"
         }
+
     ]
 }

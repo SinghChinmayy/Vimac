@@ -34,37 +34,52 @@ All keybindings below are active while holding the **Caps Lock** key:
 
 ---
 
-## 🪟 Window Management (Rectangle)
+## 🪟 Window Management (Rectangle) — Tiling Modes
 
-All keybindings below require holding **Caps Lock + Shift**:
+Two ways to activate tiling — both use the same keys inside:
 
 > [!TIP]
-> Mirrors Vim's mental model — lowercase motions move the **cursor**, Shift motions move the **window**.
+> **`Caps Lock + t`** (lowercase) = **one-shot**: tile one window, then auto-exits.
+> **`Caps Lock + T`** (uppercase) = **toggle mode**: stays active until you press `Caps Lock` alone.
 
-### Halves
+### Mode Triggers
+
+| Key | Mode | Behaviour |
+| :---: | :--- | :--- |
+| **`Caps Lock + t`** | One-shot | Tile once → auto-exits |
+| **`Caps Lock + T`** | Toggle | Stays on until `Caps Lock` exits |
+| **`Caps Lock`** (alone, in toggle mode) | — | Exit tiling mode |
+
+### Halves — `H J K L`
 
 | Key | Action | Rectangle Shortcut |
 | :---: | :--- | :--- |
-| **`⇧ + H`** | Left Half | `⌥ + ←` |
-| **`⇧ + L`** | Right Half | `⌥ + →` |
-| **`⇧ + K`** | Top Half | `⌥ + ↑` |
-| **`⇧ + J`** | Bottom Half | `⌥ + ↓` |
+| **`H`** | Left Half | `⌃ + ⌥ + ←` |
+| **`L`** | Right Half | `⌃ + ⌥ + →` |
+| **`K`** | Top Half | `⌃ + ⌥ + ↑` |
+| **`J`** | Bottom Half | `⌃ + ⌥ + ↓` |
 
-### Quarters
+### Quarters — spatially arranged around `H J K L`
+
+```
+  Y   U        top-left   top-right
+  H   L   →   (home row)
+  B   N        bottom-left  bottom-right
+```
 
 | Key | Action | Rectangle Shortcut |
 | :---: | :--- | :--- |
-| **`⇧ + U`** | Top Left | `⌥ + ⇧ + ←` |
-| **`⇧ + I`** | Top Right | `⌥ + ⇧ + →` |
-| **`⇧ + N`** | Bottom Left | `⌃ + ⌥ + J` |
-| **`⇧ + M`** | Bottom Right | `⌃ + ⌥ + K` |
+| **`Y`** | Top Left | `⌥ + ⇧ + ←` |
+| **`U`** | Top Right | `⌥ + ⇧ + →` |
+| **`B`** | Bottom Left | `⌃ + ⌥ + J` |
+| **`N`** | Bottom Right | `⌃ + ⌥ + K` |
 
 ### Size & Restore
 
 | Key | Action | Rectangle Shortcut |
 | :---: | :--- | :--- |
-| **`⇧ + F`** | Maximize | `⌥ + ⇧ + ↑` |
-| **`⇧ + R`** | Restore | `⌃ + ⌥ + ⌫` |
+| **`Space`** | Maximize | `⌃ + ⌥ + ↵` |
+| **`R`** | Restore / Undo | `⌃ + ⌥ + ⌫` |
 
 ---
 
