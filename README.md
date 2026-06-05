@@ -52,12 +52,12 @@ Two modes. Same keys inside both.
 
 **Halves:**
 
-| Key | → |
-| :---: | :--- |
-| `H` | Left half |
-| `L` | Right half |
-| `K` | Top half |
-| `J` | Bottom half |
+| Key | → | Rectangle shortcut |
+| :---: | :--- | :--- |
+| `H` | Left half | `^⌥←` |
+| `L` | Right half | `^⌥→` |
+| `K` | Top half | `^⌥↑` |
+| `J` | Bottom half | `^⌥↓` |
 
 **Quarters** (spatial layout):
 
@@ -66,19 +66,19 @@ Y  U   →  top-left   top-right
 B  N   →  bottom-left  bottom-right
 ```
 
-| Key | → |
-| :---: | :--- |
-| `Y` | Top-left |
-| `U` | Top-right |
-| `B` | Bottom-left |
-| `N` | Bottom-right |
+| Key | → | Rectangle shortcut |
+| :---: | :--- | :--- |
+| `Y` | Top-left | `^⌥U` |
+| `U` | Top-right | `^⌥I` |
+| `B` | Bottom-left | `^⌥J` |
+| `N` | Bottom-right | `^⌥K` |
 
 **Other:**
 
-| Key | → |
-| :---: | :--- |
-| `Space` | Maximize |
-| `R` | Restore |
+| Key | → | Rectangle shortcut |
+| :---: | :--- | :--- |
+| `Space` | Maximize | `^⌥↩` |
+| `R` | Restore | `^⌥⌫` |
 
 ---
 
