@@ -22,23 +22,6 @@ Hold `Caps Lock` + key:
 | `F` | Word ← |
 | `G` | Word → |
 
-**Selection** (hold `Caps Lock` + key):
-
-| Key | → |
-| :---: | :--- |
-| `A` | Select char ← |
-| `D` | Select char → |
-| `W` | Select line ↑ |
-| `S` | Select line ↓ |
-| `Q` | Select word ← |
-| `E` | Select word → |
-
-**Other:**
-
-| Key | → |
-| :---: | :--- |
-| `` ` `` | Toggle real Caps Lock |
-
 ---
 
 ## Window Tiling (Rectangle)
